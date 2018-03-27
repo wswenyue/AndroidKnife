@@ -1,0 +1,43 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2017-08-18 11:23:12
+#Description: 给apk重新签名
+_app=$1
+_app_key=$2
+_app_key_pass=$3
+
+_support_libs=$HOME/cmd/libs/signer_libs
+_temp_app=`pwd`/out_temp.apk
+_sign_app=`pwd`/out_sign.apk
+
+echo "in:${_app}    key:${_app_key}    key_pass:${_app_key_pass}"
+echo "out:${_sign_app}"
+rm $_sign_app
+rm $_temp_app
+cp $_app $_temp_app
+echo "remove apk META-INF"
+zip $_temp_app -d 'META-INF/*.RSA' 'META-INF/*.SF' 'META-INF/*.MF' >/dev/null 2>&1;
+echo "begin zipalign apk ..."
+${_support_libs}/zipalign -v -p 4 ${_temp_app} ${_sign_app} >/dev/null 2>&1;
+if [ $? -ne 0 ];then
+	echo "优化出错"
+	rm $_temp_app
+	exit 0
+fi
+echo "begin sign apk"
+${_support_libs}/apksigner sign --ks ${_app_key} --ks-pass pass:${_app_key_pass} ${_sign_app} >/dev/null 2>&1;
+if [ $? -ne 0 ];then
+	echo "签名出错"
+	rm $_temp_app
+	exit 0
+fi
+echo "sign finished ,begin check sign"
+${_support_libs}/apksigner verify ${_sign_app} >/dev/null 2>&1;
+if [ $? -ne 0 ];then
+	echo "校验签名出错"
+	rm $_temp_app
+	exit 0
+fi
+rm $_temp_app
+echo "sign succeed"
+

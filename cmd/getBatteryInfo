@@ -1,0 +1,28 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2017-08-15 11:45:10
+#Description: 获取手机电量使用情况信息
+
+info_dir="`pwd`/battery_info"
+parser_sh="$HOME/cmd/historian.py"
+if [ ! -d "$info_dir" ]; then
+	mkdir $info_dir
+fi
+date_str=`date '+%m_%d_%H-%M-%S'`
+info_txt=$info_dir/$date_str".txt"
+info_html=$info_dir/$date_str".html"
+echo $info_dir
+echo $info_txt
+echo $info_html
+
+if [[ -z "$1" ]]; then
+	echo "get all info"
+	adb shell dumpsys batterystats > $info_txt  #得到整个设备的电量消耗信
+else
+	echo "get info form $1"
+	adb shell dumpsys batterystats $1 > $info_txt #得到指定app相关的电量消耗信息
+fi
+echo "begin parser"
+python $parser_sh $info_txt > $info_html
+echo "open file $info_html"
+open $info_html

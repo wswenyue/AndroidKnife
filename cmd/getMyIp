@@ -1,0 +1,5 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2018-02-06 19:54:28
+#Description: a bash script
+ifconfig -a|grep inet|grep -v 127.0.0.1|grep -v inet6|awk '{print $2}'|tr -d "addr:"

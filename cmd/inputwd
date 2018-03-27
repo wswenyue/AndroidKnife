@@ -1,0 +1,19 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2018-03-14 18:59:37
+#Description: input text to your phone
+input_arr=( "$@" ) #将输入转成数组
+input_size=$#  #获取输入参数数量
+
+# 中间需要输入tab键
+for (( i = 0; i < $input_size; i++ )); do
+	if [[ $i -eq 0 ]]; then
+		echo ${input_arr[$i]}
+		adb shell input text ${input_arr[$i]}
+	else
+		echo "Tab"
+		echo ${input_arr[$i]}
+		adb shell input keyevent 61
+		adb shell input text ${input_arr[$i]}
+	fi
+done

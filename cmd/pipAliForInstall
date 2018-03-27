@@ -1,0 +1,12 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2017-08-07 14:42:13
+#Description: a bash script
+
+if [[ -z "$1" ]]; then
+	echo "no package name"
+	exit -1;
+fi
+
+sudo -H pip install -i http://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com $1
+

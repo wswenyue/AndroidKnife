@@ -1,0 +1,5 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2018-03-14 14:35:22
+#Description: a bash script
+adb shell netcfg |grep 'wlan0' |awk '{print $3}'|cut -d "/" -f 1

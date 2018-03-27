@@ -1,0 +1,20 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2017-09-13 20:38:24
+#Description: a bash script
+echo "begin fetch bugreport data ..."
+cur_path=`pwd`
+info_dir="$cur_path/battery_info"
+adb_sh="$HOME/cmd/libs/adb"
+server_path="$HOME/work/src/github.com/google/battery-historian"
+server_sh="$server_path/run.sh"
+if [ ! -d "$info_dir" ]; then
+	mkdir $info_dir
+fi
+time_str=`date '+%m_%d_%H-%M-%S'`
+info_txt="${info_dir}/report_${time_str}.txt"
+$adb_sh bugreport |tee $info_txt
+echo "fetch bugreport data finished ..."
+# open $info_txt
+# cd $server_path
+# sh $server_sh

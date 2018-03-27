@@ -1,0 +1,25 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2018-03-22 15:37:09
+#Description: a bash script
+# 华为
+# com.huawei.systemmanager/com.huawei.permissionmanager.ui.MainActivity
+#魅族
+# com.meizu.safe.security.SHOW_APPSEC
+# 
+
+model=`adb shell getprop ro.product.model`
+cur_component=""
+case $model in
+	*OPPO* ) 
+		cur_component=com.color.safecenter/com.color.safecenter.permission.PermissionManagerActivity
+		;;
+	*MI* )
+		cur_component=com.miui.securitycenter/com.miui.permcenter.permissions.AppPermissionsTabActivity
+		;;
+	* ) 
+		echo $model not support 
+		exit 0
+		;;
+esac
+adb shell am start -n $cur_component

@@ -1,0 +1,27 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2017-09-05 11:05:03
+#Description: a bash script
+. ./base.sh
+
+echo -e "--begin--dir->`pwd`\n"
+rm -rf bangjob/build/outputs/apk
+echo -e "delete old apks finished.\n"
+check_has "gradle" 
+
+gradle assembleDebug
+
+check_exe_error "gradle assembleDebug"
+
+echo -e "\n begin install app...\n"
+check_has adb
+adb install -r bangjob/build/outputs/apk/*.apk
+if [[ $? -eq 0 ]]; then
+	adb shell am start -n com.wuba.bangjob/com.wuba.bangjob.common.login.activity.LaunchActivity
+else
+	echo "install Error ,now uninstall apk and retry ..."
+	adb uninstall com.wuba.bangjob \
+	&& adb install bangjob/build/outputs/apk/bangjob-*.apk \
+	&& adb shell am start com.wuba.bangjob/com.wuba.bangjob.common.login.activity.LaunchActivity
+fi
+echo "over"

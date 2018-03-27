@@ -1,0 +1,15 @@
+#!/bin/bash
+if [[ -z "$1" ]];then
+newfile=~/newscript_`date +%m%d_%S`
+else
+newfile=$1
+fi
+if  ! grep "^#!" $newfile &>/dev/null; then
+cat >> $newfile << EOF
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: `date +"%F %T"`
+#Description: a bash script
+EOF
+fi
+vim +5 $newfile

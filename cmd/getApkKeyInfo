@@ -1,0 +1,10 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2017-09-05 17:58:33
+#Description: a bash script
+if [[ -z "$1" ]]; then
+	echo "please input apk file path ！！！"
+else
+	echo "apk-->$1"
+	rm -rf ./META-INF && unzip $1 "META-INF/*.RSA" -d ./ && keytool -printcert -file ./META-INF/*.RSA && rm -rf ./META-INF
+fi

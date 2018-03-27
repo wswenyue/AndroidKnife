@@ -1,0 +1,11 @@
+#!/bin/bash
+# Author: wswenyue.
+#Date & Time: 2018-01-16 16:18:30
+#Description: a bash script
+png_name=screen_`date '+%m_%d_%H-%M-%S'`.png
+png_path=/sdcard/screen
+mkdir -p screen
+adb shell mkdir -p $png_path
+adb shell screencap -p $png_path/$png_name \
+&& adb pull $png_path/$png_name ./screen/$png_name \
+&& open ./screen/$png_name
